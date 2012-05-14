@@ -17,6 +17,63 @@ use Zend\Module\Manager,
 class Module implements AutoloaderProvider
 {
     /**
+     * Initiate the module
+     *
+     * @param   Manager $oManager
+     */
+    public function init(Manager $oManager)
+    {
+        /**
+         * Register Event for CSS Compile Process
+         */
+        $oEvents = $oManager->events()->getSharedManager();
+        $oEvents->attach(
+            'bootstrap', 'bootstrap', Array($this, 'compileCss')
+        );
+    }
+
+
+    /**
+     * Compile the LESS into CSS in development mode
+     *
+     * @param   Array   $aCss   Css configuration
+     */
+    public function compileCss($oEvent)
+    {
+        /**
+         * Check we have CSS config information
+         */
+        $oConfig = $oEvent->getParam('config');
+        if (!isset($oConfig->valcommon)  || !isset($oConfig->valcommon->css)) {
+            return;
+        }
+        $oConfig = $oConfig->valcommon->css;
+
+
+        /**
+         * Check compile flag
+         */
+        $oRequest = $oEvent->getParam('application')->getRequest();
+        if (!$oRequest->query()->get('compileCss')) {
+            return;
+        }
+
+
+        /**
+         * Import the LessPHP library
+         */
+        require_once __DIR__ . "/src/lessphp/lessc.inc.php";
+
+
+        /**
+         * Define the files
+         */
+        $oLessc = new \lessc($oConfig->less);
+        file_put_contents($oConfig->css, $oLessc->parse());
+    }
+
+
+    /**
      * Autoloader config
      *
      */
