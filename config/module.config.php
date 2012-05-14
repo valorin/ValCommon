@@ -5,5 +5,8 @@ return array(
             'less' => __DIR__ . "/../../../public/css/styles.less",
             'css'  => __DIR__ . "/../../../public/css/styles.css",
         ),
+        'setting' => Array(
+            // 'key' => "value",
+        ),
     ),
 );
