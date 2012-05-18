@@ -1,9 +1,7 @@
 <?php
 namespace ValCommon;
 use ValCommon\Tools\Setting,
-    Zend\Module\Manager,
-    Zend\EventManager\Event,
-    Zend\Module\Consumer\AutoloaderProvider;
+    Zend\Mvc\MvcEvent;
 
 /**
  * ValCommon - ZF2 Common Tools Module
@@ -15,45 +13,39 @@ use ValCommon\Tools\Setting,
  * @copyright   Copyright (c) 2012, Stephen Rees-Carter <http://src.id.au/>
  * @license     New BSD Licence, see LICENCE.txt
  */
-class Module implements AutoloaderProvider
+class Module
 {
     /**
-     * Initiate the module
+     * Run Bootstrap Functionality
      *
-     * @param   Manager $oManager
+     * @param   MvcEvent    $event  Bootstrap Event
      */
-    public function init(Manager $oManager)
+    public function onBootstrap(MvcEvent $event)
     {
         /**
-         * Register Event for CSS Compile Process
+         * Run the CSS Compile Process
          */
-        $oEvents = $oManager->events()->getSharedManager();
-        $oEvents->attach(
-            'bootstrap', 'bootstrap', Array($this, 'compileCss')
-        );
+        $this->_compileCss($event);
 
 
         /**
-         * Register event to save default settings
+         * Save default settings
          */
-        $oEvents = $oManager->events()->getSharedManager();
-        $oEvents->attach(
-            'bootstrap', 'bootstrap', Array($this, 'initSettings')
-        );
+        $this->_initSettings($event);
     }
 
 
     /**
      * Compile the LESS into CSS in development mode
      *
-     * @param   Event   $oEvent Triggered Event information
+     * @param   MvcEvent    $event  MVC Bootstrap Event
      */
-    public function compileCss(Event $oEvent)
+    protected function _compileCss(MvcEvent $event)
     {
         /**
          * Check we have CSS config information
          */
-        $oConfig = $oEvent->getParam('config');
+        $oConfig = $event->getApplication()->getConfiguration();
         if (!isset($oConfig->valcommon) || !isset($oConfig->valcommon->css)) {
             return;
         }
@@ -63,7 +55,7 @@ class Module implements AutoloaderProvider
         /**
          * Check compile flag
          */
-        $oRequest = $oEvent->getParam('application')->getRequest();
+        $oRequest = $event->getRequest();
         if (!$oRequest->query()->get('compileCss')) {
             return;
         }
@@ -86,14 +78,14 @@ class Module implements AutoloaderProvider
     /**
      * Initiate the settings module
      *
-     * @param   Event   $oEvent Triggered Event information
+     * @param   MvcEvent    $event  MVC Bootstrap Event
      */
-    public function initSettings(Event $oEvent)
+    protected function _initSettings(MvcEvent $event)
     {
         /**
          * Check we have default settings
          */
-        $oConfig = $oEvent->getParam('config');
+        $oConfig = $event->getApplication()->getConfiguration();
         if (!isset($oConfig->valcommon)
             || !isset($oConfig->valcommon->setting)) {
             return;
