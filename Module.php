@@ -18,7 +18,7 @@ class Module
     /**
      * Run Bootstrap Functionality
      *
-     * @param   MvcEvent    $event  Bootstrap Event
+     * @param MvcEvent $event Bootstrap Event
      */
     public function onBootstrap(MvcEvent $event)
     {
@@ -38,7 +38,7 @@ class Module
     /**
      * Compile the LESS into CSS in development mode
      *
-     * @param   MvcEvent    $event  MVC Bootstrap Event
+     * @param MvcEvent $event MVC Bootstrap Event
      */
     protected function _compileCss(MvcEvent $event)
     {
@@ -78,7 +78,7 @@ class Module
     /**
      * Initiate the settings module
      *
-     * @param   MvcEvent    $event  MVC Bootstrap Event
+     * @param MvcEvent $event MVC Bootstrap Event
      */
     protected function _initSettings(MvcEvent $event)
     {

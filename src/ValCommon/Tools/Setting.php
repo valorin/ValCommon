@@ -22,9 +22,9 @@ class Setting
     /**
      * Retrieve Setting Value
      *
-     * @param   String  $sKey       Setting Key name
-     * @param   String  $sDefault   Default value if not found
-     * @return  String
+     * @param  String $sKey     Setting Key name
+     * @param  String $sDefault Default value if not found
+     * @return String
      */
     static public function get($sKey, $sDefault = null)
     {
@@ -43,9 +43,10 @@ class Setting
     /**
      * Set the default setting values
      *
-     * @param   Array   $aDefaults  Default values
+     * @param Array $aDefaults Default values
      */
-    static public function setDefaults($aDefaults) {
+    static public function setDefaults($aDefaults)
+    {
         self::$_aDefaults = $aDefaults;
     }
 }
