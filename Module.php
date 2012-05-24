@@ -86,8 +86,8 @@ class Module
          * Check we have default settings
          */
         $oConfig = $event->getApplication()->getConfiguration();
-        if (!isset($oConfig->valcommon)
-            || !isset($oConfig->valcommon->setting)) {
+        if (!isset($oConfig['valcommon'])
+            || !isset($oConfig['valcommon']['setting'])) {
             return;
         }
 
@@ -95,7 +95,7 @@ class Module
         /**
          * Save in Settings manager
          */
-        Setting::setDefaults($oConfig->valcommon->setting);
+        Setting::setDefaults($oConfig['valcommon']['setting']);
     }
 
 
